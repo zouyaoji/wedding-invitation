@@ -1,18 +1,18 @@
 <template>
-    <div class="index">
-        <image class="bg-image" :src="background"/>
-        <div class="bg-swiper">
-            <index-swiper :list="list"></index-swiper>
-        </div>
-        <div class="bg_music" v-if="isPlay" @tap="audioPlay">
-            <image src="../../static/images/music_icon.png" class="musicImg music_icon"/>
-            <image src="../../static/images/music_play.png" class="music_play pauseImg"/>
-        </div>
-        <div class="bg_music" v-else @tap="audioPlay">
-            <image src="../../static/images/music_icon.png" class="musicImg"/>
-            <image src="../../static/images/music_play.png" class="music_play playImg"/>
-        </div>
+  <div class="index">
+    <image :src="background" class="bg-image" />
+    <div class="bg-swiper">
+      <index-swiper :list="list" :info="info"></index-swiper>
     </div>
+    <div @tap="audioPlay" class="bg_music" v-if="isPlay">
+      <image class="musicImg music_icon" src="../../static/images/music_icon.png" />
+      <image class="music_play pauseImg" src="../../static/images/music_play.png" />
+    </div>
+    <div @tap="audioPlay" class="bg_music" v-else>
+      <image class="musicImg" src="../../static/images/music_icon.png" />
+      <image class="music_play playImg" src="../../static/images/music_play.png" />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -28,7 +28,8 @@ export default {
       isPlay: false,
       list: [],
       audioCtx: '',
-      background: ''
+      background: '',
+      info: {}
     }
   },
   onLoad () {
@@ -40,6 +41,7 @@ export default {
     const common = db.collection('common')
     common.get().then(res => {
       this.background = res.data[0].background
+      this.info = res.data[0].info
     })
   },
   onShow () {

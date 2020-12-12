@@ -1,7 +1,7 @@
 <template>
     <div class="map">
         <image mode="aspectFit" class="head-img" src="../../static/images/t1.png"/>
-        <map class="content" id="map" longitude="104.088262" latitude="30.763111" :markers="markers" scale="18" @tap="toNav">
+        <map class="content" id="map" :longitude="markers[0].longitude" :latitude="markers[0].latitude" :markers="markers" scale="18" @tap="toNav">
         </map>
         <div class="call">
             <div class="left" @tap="linkHe">
@@ -27,10 +27,10 @@ export default {
       markers: [{
         iconPath: '../../static/images/nav.png',
         id: 0,
-        latitude: 30.763111,
-        longitude: 104.088262,
         width: 50,
-        height: 50
+        height: 50,
+        latitude: '30',
+        longitude: '104'
       }]
     }
   },
@@ -41,13 +41,15 @@ export default {
     common.get().then(res => {
       that.heNumber = res.data[0].heNumber
       that.sheNumber = res.data[0].sheNumber
+      that.markers[0].latitude = res.data[0].location.latitude
+      that.markers[0].longitude = res.data[0].location.longitude
     })
   },
   methods: {
     toNav () {
       wx.openLocation({
-        latitude: 30.763111,
-        longitude: 104.088262,
+        latitude: Number(this.markers[0].latitude),
+        longitude: Number(this.markers[0].longitude),
         scale: 18
       })
     },

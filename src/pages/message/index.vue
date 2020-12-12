@@ -74,7 +74,8 @@ export default {
       isFormlist: false,
       formList: [],
       url: '',
-      poster: ''
+      poster: '',
+      adminsIds: []
     }
   },
   onLoad () {
@@ -89,7 +90,7 @@ export default {
   },
   computed: {
     isAdmin: function () {
-      return this.openId === 'o2g_z5Bccke5PW_JIUCB9_LOTV48'
+      return this.adminsIds.indexOf(this.openId) !== -1
     }
   },
   methods: {
@@ -100,6 +101,7 @@ export default {
       common.get().then(res => {
         that.url = res.data[0].videoUrl
         that.poster = res.data[0].poster
+        that.adminsIds = res.data[0].adminOpenId
       })
     },
     toMessage (e) {
