@@ -1,0 +1,81 @@
+{
+  "pages": [
+    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "婚礼邀请函"
+      }
+    },
+    {
+      "path": "pages/greet/index",
+      "style": {
+        "navigationBarTitleText": "好友祝福"
+      }
+    },
+    {
+      "path": "pages/map/index",
+      "style": {
+        "navigationBarTitleText": "酒店导航"
+      }
+    },
+    {
+      "path": "pages/message/index",
+      "style": {
+        "navigationBarTitleText": "留言评论"
+      }
+    },
+    {
+      "path": "pages/photo/index",
+      "style": {
+        "navigationBarTitleText": "甜蜜相册"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#ccc",
+    "selectedColor": "#ff4c91",
+    "borderStyle": "white",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/images/1-1.png",
+        "selectedIconPath": "static/images/1-2.png",
+        "text": "邀请函"
+      },
+      {
+        "pagePath": "pages/photo/index",
+        "iconPath": "static/images/2-1.png",
+        "selectedIconPath": "static/images/2-2.png",
+        "text": "甜蜜相册"
+      },
+      {
+        "pagePath": "pages/map/index",
+        "iconPath": "static/images/3-1.png",
+        "selectedIconPath": "static/images/3-2.png",
+        "text": "酒店导航"
+      },
+      {
+        "pagePath": "pages/greet/index",
+        "iconPath": "static/images/4-1.png",
+        "selectedIconPath": "static/images/4-2.png",
+        "text": "好友祝福"
+      },
+      {
+        "pagePath": "pages/message/index",
+        "iconPath": "static/images/5-1.png",
+        "selectedIconPath": "static/images/5-2.png",
+        "text": "留言评论"
+      }
+    ]
+  },
+  "requiredBackgroundModes": ["audio"],
+  "cloud": true,
+  "globalStyle": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  }
+}
