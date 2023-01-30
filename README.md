@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2020-12-12 16:15:26
- * @LastEditTime: 2023-01-30 14:35:02
+ * @LastEditTime: 2023-01-30 15:11:43
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation-github\README.md
@@ -20,6 +20,7 @@
 - 修改我要出席逻辑，已经填过出席的再次填是修改之前填的。
 - 增加 CSS 动画效果。
 - 改为 uniapp + vue3 + ts + vite 技术栈。
+- 适配了微信小程序 “头像昵称填写” 能力。
 
 ## 体验
 
