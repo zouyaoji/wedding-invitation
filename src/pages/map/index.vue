@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:21:48
- * @LastEditTime: 2022-04-14 10:24:07
+ * @LastEditTime: 2023-01-30 00:26:35
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\map\index.vue
@@ -16,7 +16,7 @@
       :latitude="markers[0].latitude"
       :markers="markers"
       scale="18"
-      @tap="toNav"
+      @markertap="toNav"
     >
     </map>
     <div class="call">
@@ -33,6 +33,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { getCommonConfig } from '@src/api/wedding-invitation'
 import { onMounted, ref } from 'vue'
 
 const markers = ref([
@@ -50,17 +51,27 @@ const heNumber = ref('')
 const sheNumber = ref('')
 
 onMounted(() => {
-  const db = wx.cloud.database()
-  const common = db.collection('common')
-  common.get().then(res => {
-    heNumber.value = res.data[0].heNumber
-    sheNumber.value = res.data[0].sheNumber
-    markers.value[0].latitude = res.data[0].location.latitude
-    markers.value[0].longitude = res.data[0].location.longitude
-  })
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    const db = wx.cloud.database()
+    const common = db.collection('common')
+    common.get().then(res => {
+      heNumber.value = res.data[0].heNumber
+      sheNumber.value = res.data[0].sheNumber
+      markers.value[0].latitude = res.data[0].location.latitude
+      markers.value[0].longitude = res.data[0].location.longitude
+    })
+  } else {
+    getCommonConfig().then(res => {
+      heNumber.value = res.data.heNumber
+      sheNumber.value = res.data.sheNumber
+      markers.value[0].latitude = res.data.location.latitude
+      markers.value[0].longitude = res.data.location.longitude
+    })
+  }
 })
 
-const toNav = () => {
+const toNav = res => {
+  console.log(res)
   wx.openLocation({
     latitude: Number(markers.value[0].latitude),
     longitude: Number(markers.value[0].longitude),

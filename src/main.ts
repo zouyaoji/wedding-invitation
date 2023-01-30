@@ -1,7 +1,7 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2022-04-14 14:29:31
+ * @LastEditTime: 2023-01-30 00:14:18
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation\src\main.ts
@@ -13,10 +13,13 @@ import './animate.scss'
 
 import App from './App.vue'
 import { GlobalData } from './types'
+import { getMusicConfig } from './api/wedding-invitation'
 
-wx.cloud.init({
-  env: import.meta.env.VITE_VUE_WECHAT_ENV as string
-})
+if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+  wx.cloud.init({
+    env: import.meta.env.VITE_VUE_WECHAT_ENV as string
+  })
+}
 
 let innerAudioContext = wx.createInnerAudioContext()
 innerAudioContext.autoplay = true
@@ -73,13 +76,20 @@ const globalData: GlobalData = {
   ]
 }
 
-const db = wx.cloud.database()
-const music = db.collection('music')
+if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+  const db = wx.cloud.database()
+  const music = db.collection('music')
 
-music.get().then(res => {
-  globalData.musicList = res.data as any[]
-  innerAudioContext.src = globalData.musicList[0].musicUrl
-})
+  music.get().then(res => {
+    globalData.musicList = res.data as any[]
+    innerAudioContext.src = globalData.musicList[0].musicUrl
+  })
+} else {
+  getMusicConfig().then(res => {
+    globalData.musicList = res.data as any[]
+    innerAudioContext.src = globalData.musicList[0].musicUrl
+  })
+}
 
 export function createApp() {
   const app = createSSRApp(App)

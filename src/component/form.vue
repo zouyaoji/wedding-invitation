@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-14 10:26:22
- * @LastEditTime: 2022-04-14 14:04:04
+ * @LastEditTime: 2023-01-29 23:40:31
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation\src\component\form.vue
@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts" setup>
+import { addOrUpdatePresent } from '@src/api/wedding-invitation'
 import { showToast } from '@src/utils'
 import { getCurrentInstance, ref } from 'vue'
 const list = ref([
@@ -71,6 +72,7 @@ const _id = ref('')
 
 const instance = getCurrentInstance()
 const $emit = defineEmits(['closeForm'])
+const openId = instance.appContext.config.globalProperties.$MpUserData.openId
 
 const cancel = () => {
   $emit('closeForm')
@@ -112,41 +114,57 @@ const checkPhone = () => {
 }
 
 const addPresent = () => {
-  const db = wx.cloud.database()
-  const present = db.collection('present')
-  if (_id.value !== '') {
-    present.doc(_id.value).update({
-      data: {
-        name: name.value,
-        phone: phone.value,
-        count: count.value,
-        desc: desc.value
-      },
-      success: function (res) {
-        name.value = ''
-        phone.value = ''
-        count.value = '自己出席'
-        desc.value = ''
-        $emit('closeForm')
-      }
-    })
-  } else {
-    present
-      .add({
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    const db = wx.cloud.database()
+    const present = db.collection('present')
+    if (_id.value !== '') {
+      present.doc(_id.value).update({
         data: {
           name: name.value,
           phone: phone.value,
           count: count.value,
           desc: desc.value
+        },
+        success: function (res) {
+          name.value = ''
+          phone.value = ''
+          count.value = '自己出席'
+          desc.value = ''
+          $emit('closeForm')
         }
       })
-      .then(res => {
-        name.value = ''
-        phone.value = ''
-        count.value = '自己出席'
-        desc.value = ''
-        $emit('closeForm')
-      })
+    } else {
+      present
+        .add({
+          data: {
+            name: name.value,
+            phone: phone.value,
+            count: count.value,
+            desc: desc.value
+          }
+        })
+        .then(res => {
+          name.value = ''
+          phone.value = ''
+          count.value = '自己出席'
+          desc.value = ''
+          $emit('closeForm')
+        })
+    }
+  } else {
+    addOrUpdatePresent({
+      name: name.value,
+      phone: phone.value,
+      count: count.value,
+      desc: desc.value,
+      _openid: openId
+    }).then(res => {
+      name.value = ''
+      phone.value = ''
+      count.value = '自己出席'
+      desc.value = ''
+      $emit('closeForm')
+    })
   }
 }
 
@@ -155,6 +173,7 @@ const updateForm = formData => {
   phone.value = formData.phone
   phoneFlag.value = formData.phoneFlag
   _id.value = formData._id
+  desc.value = formData.desc
 
   list.value.forEach(item => {
     item.checked = formData.count === item.name

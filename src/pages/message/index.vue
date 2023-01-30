@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:29:22
- * @LastEditTime: 2022-04-14 14:17:07
+ * @LastEditTime: 2023-01-29 23:45:26
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\message\index.vue
@@ -12,8 +12,9 @@
       <p class="place"></p>
       <div class="item" v-for="(item, index) in messageList" :key="index">
         <image class="left" :src="item.url" />
-        <div class="right">
+        <div class="right" @click="copy(item)">
           <div class="top">
+            <uni-tag v-if="typeof item.customIndex === 'number'" text="置顶" type="success" />
             <div class="delete" @tap="deleteMessage(item)">
               <image
                 src="../../static/images/close.png"
@@ -64,6 +65,43 @@
       <h-formlist @closeFormlist="closeFormlist" :formList="formList"></h-formlist>
     </div>
   </div>
+
+  <view class="cu-modal" :class="modalName === 'Modal' ? 'show' : ''">
+    <view class="cu-dialog">
+      <view class="cu-bar bg-white justify-end">
+        <view class="content">怎么称呼您？</view>
+        <view class="action" @tap="hideModal">
+          <text class="cuIcon-close text-red"></text>
+        </view>
+      </view>
+      <view class="padding-sm">
+        <form>
+          <view class="cu-form-group margin-top">
+            <view class="title">头像</view>
+
+            <button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+              <view
+                class="cu-avatar round lg"
+                :style="{
+                  'background-image': `url(${avatarUrl})`
+                }"
+              ></view>
+            </button>
+          </view>
+          <view class="cu-form-group margin-top">
+            <view class="title">昵称</view>
+            <input type="nickname" placeholder="请选择或输入昵称" @blur="onInput" v-model="nickname" />
+          </view>
+        </form>
+      </view>
+      <view class="cu-bar bg-white justify-end">
+        <view class="action">
+          <button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+          <button class="cu-btn bg-green margin-left" @tap="onConfirm">确定</button>
+        </view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -73,6 +111,19 @@ import HForm from '@src/component/form.vue'
 import HFormlist from '@src/component/formlist.vue'
 import { showToast } from '@src/utils'
 import { GlobalData } from '@src/types'
+import UniTag from '@src/component/uni-tag.vue'
+import {
+  addMessage,
+  addOrUpdateUser,
+  code2Session,
+  getAllMessageList,
+  getCommonConfig,
+  getPresentList,
+  getUserByOpenId,
+  uploadAvatar,
+  deleteMessage as deleteMessageApi,
+  addOrUpdatePresent
+} from '@src/api/wedding-invitation'
 
 const isOpen = ref(false)
 const desc = ref('')
@@ -87,15 +138,21 @@ const url = ref('')
 const poster = ref('')
 const adminsIds = ref([])
 const musicPlay = ref(false)
-
+const nickname = ref('')
 const formRef = ref(null)
 
+const modalName = ref(null)
 const instance = getCurrentInstance()
 const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
+openId.value = instance.appContext.config.globalProperties.$MpUserData.openId
 
 const isAdmin = computed(() => {
   return adminsIds.value.indexOf(openId.value) !== -1
 })
+
+const avatarUrl = ref(
+  'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+)
 
 onMounted(() => {
   getVideoUrl()
@@ -105,25 +162,87 @@ onMounted(() => {
   getMessageList()
 })
 
-const getVideoUrl = () => {
-  const db = wx.cloud.database()
-  const common = db.collection('common')
-  common.get().then(res => {
-    url.value = res.data[0].videoUrl
-    poster.value = res.data[0].poster
-    adminsIds.value = res.data[0].adminOpenId
+const onInput = e => {
+  nickname.value = e.detail.value
+}
+
+const hideModal = e => {
+  modalName.value = null
+}
+
+const onConfirm = e => {
+  if (nickname.value === null || nickname.value === '') {
+    showToast('请选择或输入昵称~')
+    return
+  }
+
+  if (avatarUrl.value === null || avatarUrl.value === '') {
+    showToast('请选择或上传头像~')
+    return
+  }
+  modalName.value = null
+
+  uploadAvatar(avatarUrl.value, {
+    openId: instance.appContext.config.globalProperties.$MpUserData.openId
+  }).then(res => {
+    addOrUpdateUser({
+      _openid: instance.appContext.config.globalProperties.$MpUserData.openId,
+      user: {
+        nickName: nickname.value,
+        avatarUrl: res.data
+      }
+    }).then(res => {
+      isOpen.value = true
+      getUserByOpenId(instance.appContext.config.globalProperties.$MpUserData.openId).then(res => {
+        if (res?.data?.length > 0) {
+          instance.appContext.config.globalProperties.$MpUserData = {
+            openId: instance.appContext.config.globalProperties.$MpUserData,
+            ...res.data[0]
+          }
+        }
+      })
+    })
   })
 }
 
-const toMessage = e => {
-  if (e.target.errMsg === 'getUserInfo:ok') {
-    wx.getUserInfo({
-      success: function (res) {
-        userInfo.value = res.userInfo
-        isOpen.value = true
-        getOpenId()
+const onChooseAvatar = e => {
+  avatarUrl.value = e.detail.avatarUrl
+}
+
+const getVideoUrl = () => {
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    const db = wx.cloud.database()
+    const common = db.collection('common')
+    common.get().then(res => {
+      url.value = res.data[0].videoUrl
+      poster.value = res.data[0].poster
+      adminsIds.value = res.data[0].adminOpenId
+    })
+  } else {
+    getCommonConfig().then(res => {
+      url.value = res.data.videoUrl
+      poster.value = res.data.poster
+      adminsIds.value = res.data.adminOpenId
+    })
+  }
+}
+
+const copy = item => {
+  if (typeof item.customIndex === 'number') {
+    uni.setClipboardData({
+      data: item.desc,
+      success: function () {
+        showToast('复制成功')
       }
     })
+  }
+}
+
+const toMessage = e => {
+  if (instance.appContext.config.globalProperties.$MpUserData?.user) {
+    isOpen.value = true
+  } else {
+    modalName.value = 'Modal'
   }
 }
 
@@ -133,23 +252,38 @@ const cancel = () => {
 
 const sendMessage = () => {
   if (desc.value) {
-    const db = wx.cloud.database()
-    const message = db.collection('message')
-    message
-      .add({
-        data: {
-          desc: desc.value,
-          type: 'message',
-          time: getNowFormatDate(),
-          url: userInfo.value.avatarUrl,
-          name: userInfo.value.nickName
-        }
-      })
-      .then(res => {
+    if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+      const db = wx.cloud.database()
+      const message = db.collection('message')
+      message
+        .add({
+          data: {
+            desc: desc.value,
+            type: 'message',
+            time: getNowFormatDate(),
+            url: userInfo.value.avatarUrl,
+            name: userInfo.value.nickName
+          }
+        })
+        .then(res => {
+          isOpen.value = false
+          desc.value = ''
+          getMessageList()
+        })
+    } else {
+      addMessage({
+        desc: desc.value,
+        type: 'message',
+        time: getNowFormatDate(),
+        url: instance.appContext.config.globalProperties.$MpUserData?.user.avatarUrl,
+        name: instance.appContext.config.globalProperties.$MpUserData?.user.nickName,
+        _openid: instance.appContext.config.globalProperties.$MpUserData.openId
+      }).then(res => {
         isOpen.value = false
         desc.value = ''
         getMessageList()
       })
+    }
   } else {
     showToast('说点什么吧~')
   }
@@ -161,31 +295,40 @@ const deleteMessage = item => {
     content: '确认删除？',
     success(res) {
       if (res.confirm) {
-        if (isAdmin.value) {
-          wx.cloud
-            .callFunction({
-              name: 'message',
-              data: {
-                _id: item._id
-              }
-            })
-            .then(res => {
-              desc.value = ''
-              getMessageList()
-            })
+        if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+          if (isAdmin.value) {
+            wx.cloud
+              .callFunction({
+                name: 'message',
+                data: {
+                  _id: item._id
+                }
+              })
+              .then(res => {
+                desc.value = ''
+                getMessageList()
+              })
+          } else {
+            const db = wx.cloud.database()
+            const message = db.collection('message')
+            message
+              .doc(item._id)
+              .remove()
+              .then(res => {
+                desc.value = ''
+                getMessageList()
+              })
+              .catch(e => {
+                console.log(e)
+              })
+          }
         } else {
-          const db = wx.cloud.database()
-          const message = db.collection('message')
-          message
-            .doc(item._id)
-            .remove()
-            .then(res => {
-              desc.value = ''
-              getMessageList()
-            })
-            .catch(e => {
-              console.log(e)
-            })
+          deleteMessageApi({
+            _id: item._id
+          }).then(res => {
+            desc.value = ''
+            getMessageList()
+          })
         }
       } else if (res.cancel) {
       }
@@ -226,24 +369,36 @@ const getNowFormatDate = () => {
 }
 
 const getMessageList = () => {
-  wx.cloud
-    .callFunction({
-      name: 'messageList',
-      data: {}
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    wx.cloud
+      .callFunction({
+        name: 'messageList',
+        data: {}
+      })
+      .then(res => {
+        messageList.value = (res.result as AnyObject).data.reverse()
+      })
+  } else {
+    getAllMessageList().then(res => {
+      messageList.value = res.data.reverse()
     })
-    .then(res => {
-      messageList.value = (res.result as AnyObject).data.reverse()
-    })
+  }
 }
 
 const toForm = e => {
-  if (e.target.errMsg === 'getUserInfo:ok') {
-    wx.getUserInfo({
-      success: function (res) {
-        userInfo.value = res.userInfo
-        getOpenId('present')
-      }
-    })
+  // if (e.target.errMsg === 'getUserInfo:ok') {
+  //   wx.getUserInfo({
+  //     success: function (res: any) {
+  //       userInfo.value = res.userInfo
+  //       getOpenId(res.code, 'present')
+  //     }
+  //   })
+  // }
+
+  if (instance.appContext.config.globalProperties.$MpUserData?.user) {
+    getIsPresentExist()
+  } else {
+    modalName.value = 'Modal'
   }
 }
 
@@ -264,47 +419,50 @@ const addUser = () => {
       // console.log(res)
     })
 }
-
-const getOpenId = (type?) => {
-  wx.cloud
-    .callFunction({
-      name: 'user',
-      data: {}
-    })
-    .then(res => {
-      openId.value = (res.result as AnyObject).openid
-      if (type === 'present') {
-        getIsPresentExist()
-      } else {
-        getIsExist()
-      }
-    })
-}
-
 const getIsPresentExist = () => {
-  const db = wx.cloud.database()
-  const present = db.collection('present')
-  present
-    .where({
-      _openid: openId.value
-    })
-    .get()
-    .then(res => {
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    const db = wx.cloud.database()
+    const present = db.collection('present')
+    present
+      .where({
+        _openid: openId.value
+      })
+      .get()
+      .then(res => {
+        const formData: any = {
+          dataFlag: false,
+          _id: ''
+        }
+        if (res.data.length !== 0) {
+          formData.name = res.data[0].name
+          formData.phone = res.data[0].phone
+          formData.count = res.data[0].count
+          formData.phoneFlag = true
+          formData._id = res.data[0]._id
+          formData.desc = res.data[0].desc
+        }
+
+        formRef.value.updateForm(formData)
+        isForm.value = true
+      })
+  } else {
+    getPresentList(openId.value).then(res => {
       const formData: any = {
         dataFlag: false,
         _id: ''
       }
-      if (res.data.length !== 0) {
+      if (res?.data?.length) {
         formData.name = res.data[0].name
         formData.phone = res.data[0].phone
         formData.count = res.data[0].count
         formData.phoneFlag = true
         formData._id = res.data[0]._id
+        formData.desc = res.data[0].desc
       }
-
       formRef.value.updateForm(formData)
       isForm.value = true
     })
+  }
 }
 
 const getIsExist = () => {
@@ -348,13 +506,27 @@ const closeFormlist = () => {
 }
 
 const getFromlist = () => {
-  wx.cloud
-    .callFunction({
-      name: 'presentList',
-      data: {}
-    })
-    .then(res => {
-      formList.value = (res.result as AnyObject).data.reverse().map(x => {
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    wx.cloud
+      .callFunction({
+        name: 'presentList',
+        data: {}
+      })
+      .then(res => {
+        formList.value = (res.result as AnyObject).data.reverse().map(x => {
+          return {
+            count: x.count,
+            desc: x.desc,
+            name: x.name,
+            phone: isAdmin.value ? x.phone : x.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'),
+            _id: x._id,
+            _openid: x._openid
+          }
+        })
+      })
+  } else {
+    getPresentList().then(res => {
+      formList.value = res.data.reverse().map(x => {
         return {
           count: x.count,
           desc: x.desc,
@@ -365,10 +537,14 @@ const getFromlist = () => {
         }
       })
     })
+  }
 }
 </script>
 
 <style lang="scss" scoped>
+.cu-form-group .title {
+  min-width: calc(4em + 15px);
+}
 .message {
   height: 100%;
   width: 100%;
@@ -383,7 +559,7 @@ const getFromlist = () => {
       height: 160rpx;
     }
     .item {
-      width: 630rpx;
+      width: 695rpx;
       margin-left: 30rpx;
       border-radius: 16rpx;
       background: #fff;
@@ -474,6 +650,19 @@ const getFromlist = () => {
     z-index: 99;
     background: #fff;
     width: 100%;
+    .avatar-wrapper {
+      padding: 0;
+      width: 56px !important;
+      border-radius: 8px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+
+    .avatar {
+      display: block;
+      width: 56px;
+      height: 56px;
+    }
     textarea {
       height: 200rpx;
       line-height: 42rpx;

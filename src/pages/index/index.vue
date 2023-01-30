@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2022-04-14 12:08:36
+ * @LastEditTime: 2023-01-30 00:16:41
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\index\index.vue
@@ -29,6 +29,7 @@ import IndexSwiper from '@src/component/index-swiper.vue'
 import { onHide, onLoad, onShareAppMessage, onShow, onUnload } from '@dcloudio/uni-app'
 import { GlobalData } from '@src/types'
 import { showToast } from '@src/utils'
+import { getCommonConfig, getIndexBannerList } from '@src/api/wedding-invitation'
 
 const isPlaying = ref(false)
 const list = ref([])
@@ -45,12 +46,19 @@ onLoad(() => {
   innerAudioContext.onPlay(onPlay)
   innerAudioContext.onPause(onPause)
 
-  const db = wx.cloud.database()
-  const common = db.collection('common')
-  common.get().then(res => {
-    background.value = res.data[0].background
-    info.value = res.data[0].info
-  })
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    const db = wx.cloud.database()
+    const common = db.collection('common')
+    common.get().then(res => {
+      background.value = res.data[0].background
+      info.value = res.data[0].info
+    })
+  } else {
+    getCommonConfig().then(res => {
+      background.value = res.data.background
+      info.value = res.data.info
+    })
+  }
 
   getBannerList()
 })
@@ -87,20 +95,35 @@ const onEnded = () => {
 }
 
 const getBannerList = () => {
-  const db = wx.cloud.database()
-  const banner = db.collection('banner')
-  banner.get().then(res => {
-    let result = []
-    let animations = ['fadeInLeft', 'slideInDown', 'rotateInDownRight', 'rollIn', 'jackInTheBox', 'flip']
-    for (let i = 0; i < res.data[0].bannerList.length; i++) {
-      result.push({
-        url: res.data[0].bannerList[i],
-        show: i === 0,
-        class: animations[i]
-      })
-    }
-    list.value = result
-  })
+  if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
+    const db = wx.cloud.database()
+    const banner = db.collection('banner')
+    banner.get().then(res => {
+      let result = []
+      let animations = ['fadeInLeft', 'slideInDown', 'rotateInDownRight', 'rollIn', 'jackInTheBox', 'flip']
+      for (let i = 0; i < res.data[0].bannerList.length; i++) {
+        result.push({
+          url: res.data[0].bannerList[i],
+          show: i === 0,
+          class: animations[i]
+        })
+      }
+      list.value = result
+    })
+  } else {
+    getIndexBannerList().then(res => {
+      let result = []
+      let animations = ['fadeInLeft', 'slideInDown', 'rotateInDownRight', 'rollIn', 'jackInTheBox', 'flip']
+      for (let i = 0; i < res.data.bannerList.length; i++) {
+        result.push({
+          url: res.data.bannerList[i],
+          show: i === 0,
+          class: animations[i]
+        })
+      }
+      list.value = result
+    })
+  }
 }
 
 onShareAppMessage(() => {

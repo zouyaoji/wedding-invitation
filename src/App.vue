@@ -1,7 +1,7 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2022-04-14 13:19:28
+ * @LastEditTime: 2023-01-29 14:10:01
  * @LastEditors: zouyaoji
  * @Description:
  * @FilePath: \wedding-invitation\src\App.vue
@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 import { getCurrentInstance, onMounted } from 'vue'
+import { code2Session, getUserByOpenId } from './api/wedding-invitation'
 
 onLaunch(() => {
   console.log('App Launch')
@@ -35,12 +36,36 @@ uni.getSystemInfo({
     const custom = uni.getMenuButtonBoundingClientRect()
     instance.appContext.config.globalProperties.$Custom = custom
     instance.appContext.config.globalProperties.$CustomBar = custom.bottom + custom.top - e.statusBarHeight!
-
     // #endif
+
     // #ifdef MP-ALIPAY
     instance.appContext.config.globalProperties.$StatusBar = e.statusBarHeight
     instance.appContext.config.globalProperties.$CustomBar = e.statusBarHeight! + e.titleBarHeight!
     // #endif
+
+    uni.login({
+      provider: 'weixin',
+      success: res => {
+        code2Session(res.code).then(res => {
+          const openId = res.data.openid
+          instance.appContext.config.globalProperties.$MpUserData = {
+            openId
+          }
+
+          getUserByOpenId(openId).then(res => {
+            if (res?.data?.length > 0) {
+              instance.appContext.config.globalProperties.$MpUserData = {
+                openId,
+                ...res.data[0]
+              }
+            }
+          })
+        })
+      },
+      fail: err => {
+        console.log('login fail:', err)
+      }
+    })
   },
   fail: function (e) {
     console.log(e)
@@ -48,6 +73,10 @@ uni.getSystemInfo({
 })
 </script>
 <style lang="scss">
+@import 'common/colorui/main.css';
+@import 'common/colorui/icon.css';
+@import 'common/colorui/animation.css';
+
 page {
   height: 100%;
 }
