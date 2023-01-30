@@ -1,5 +1,5 @@
 {
-  "name": "uni-preset-vue",
+  "name": "wedding-invitation",
   "version": "0.0.0",
   "scripts": {
     "dev:app": "uni -p app",
@@ -44,6 +44,7 @@
     "@dcloudio/uni-mp-toutiao": "3.0.0-alpha-3040420220402002",
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-3040420220402002",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3040420220402002",
+    "luch-request": "^3.0.8",
     "miniprogram-api-typings": "^3.4.6",
     "vue": "^3.2.31",
     "vue-i18n": "^9.1.9",

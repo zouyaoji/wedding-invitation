@@ -22,6 +22,7 @@ specifiers:
   eslint-config-prettier: ^8.3.0
   eslint-config-standard: ^16.0.3
   eslint-plugin-vue: ^7.16.0
+  luch-request: ^3.0.8
   miniprogram-api-typings: ^3.4.6
   prettier: 2.5.0
   sass: 1.32.0
@@ -45,6 +46,7 @@ dependencies:
   '@dcloudio/uni-mp-toutiao': 3.0.0-alpha-3040420220402002_vue@3.2.32
   '@dcloudio/uni-mp-weixin': 3.0.0-alpha-3040420220402002_vue@3.2.32
   '@dcloudio/uni-quickapp-webview': 3.0.0-alpha-3040420220402002_vue@3.2.32
+  luch-request: 3.0.8
   miniprogram-api-typings: 3.4.6
   vue: 3.2.32
   vue-i18n: 9.1.9_vue@3.2.32
@@ -356,7 +358,6 @@ packages:
 
   /@dcloudio/types/2.6.3:
     resolution: {integrity: sha512-IanHe26b9P+m3I+GF4nPzgUr3tf/T+fAmFcgqfrA0vrAfgZOM5im1Nsdgg2sPFoYpLikf6TG57OW1Z3S98lTAg==}
-    dev: true
 
   /@dcloudio/uni-app-plus/3.0.0-alpha-3040420220402002_vite@2.9.1+vue@3.2.32:
     resolution: {integrity: sha512-dfUAueXBaijq8hD6OhJhGuRe2TxWXPOLf9GB4skUhDE0WNJgEf1Erelg9gzAA2HDxjffvmfezZqSiBpAGpG3mA==}
@@ -2303,6 +2304,12 @@ packages:
     resolution: {integrity: sha512-E1v547OCgJvbvevfjgK9sNKIVXO96NnsTsFPBlg4ZxjhsJSODoH9lk8Bm0OxvHNm6Vm5Yqkl/1fErDxhYL8Skg==}
     engines: {node: '>=12'}
     dev: true
+
+  /luch-request/3.0.8:
+    resolution: {integrity: sha512-5ZVp1y4tFaizbGMOuQwbeyfHnf4PhQAwQ3S1Fm1tS7juMoB14pXslxWriElhiSq6ytYYW0KVC8RShfHiNujFcQ==}
+    dependencies:
+      '@dcloudio/types': 2.6.3
+    dev: false
 
   /magic-string/0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
