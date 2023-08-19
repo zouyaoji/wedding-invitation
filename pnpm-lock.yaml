@@ -10,7 +10,7 @@ dependencies:
     version: 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vue@3.2.32)
   '@dcloudio/uni-app-plus':
     specifier: 3.0.0-alpha-3040420220402002
-    version: 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.1)(vue@3.2.32)
+    version: 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.16)(vue@3.2.32)
   '@dcloudio/uni-components':
     specifier: 3.0.0-alpha-3040420220402002
     version: 3.0.0-alpha-3040420220402002
@@ -69,10 +69,10 @@ devDependencies:
     version: 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vue@3.2.32)
   '@dcloudio/vite-plugin-uni':
     specifier: 3.0.0-alpha-3040420220402002
-    version: 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.1)(vue@3.2.32)
+    version: 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.16)(vue@3.2.32)
   '@vitejs/plugin-vue':
     specifier: ^1.10.2
-    version: 1.10.2(vite@2.9.1)
+    version: 1.10.2(vite@2.9.16)
   eslint:
     specifier: ^7.32.0
     version: 7.32.0
@@ -98,8 +98,8 @@ devDependencies:
     specifier: ^4.6.3
     version: 4.6.3
   vite:
-    specifier: ^2.9.1
-    version: 2.9.1(sass@1.32.0)(stylus@0.57.0)
+    specifier: ^2.9.16
+    version: 2.9.16(sass@1.32.0)(stylus@0.57.0)
 
 packages:
 
@@ -392,10 +392,10 @@ packages:
   /@dcloudio/types@2.6.3:
     resolution: {integrity: sha512-IanHe26b9P+m3I+GF4nPzgUr3tf/T+fAmFcgqfrA0vrAfgZOM5im1Nsdgg2sPFoYpLikf6TG57OW1Z3S98lTAg==}
 
-  /@dcloudio/uni-app-plus@3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.1)(vue@3.2.32):
+  /@dcloudio/uni-app-plus@3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.16)(vue@3.2.32):
     resolution: {integrity: sha512-dfUAueXBaijq8hD6OhJhGuRe2TxWXPOLf9GB4skUhDE0WNJgEf1Erelg9gzAA2HDxjffvmfezZqSiBpAGpG3mA==}
     dependencies:
-      '@dcloudio/uni-app-vite': 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.1)(vue@3.2.32)
+      '@dcloudio/uni-app-vite': 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.16)(vue@3.2.32)
       '@dcloudio/uni-app-vue': 3.0.0-alpha-3040420220402002
     transitivePeerDependencies:
       - postcss
@@ -405,7 +405,7 @@ packages:
       - vue
     dev: false
 
-  /@dcloudio/uni-app-vite@3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.1)(vue@3.2.32):
+  /@dcloudio/uni-app-vite@3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.16)(vue@3.2.32):
     resolution: {integrity: sha512-kEfIu1vduiKuR+4KnVzVBxJvcQ/PHk36+vPAq/3XsLjXiCfSD1Pri+3Yi6N8mNaut3KZVuVfUjZtZ8hYX9cRsA==}
     dependencies:
       '@dcloudio/uni-cli-shared': 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vue@3.2.32)
@@ -413,7 +413,7 @@ packages:
       '@dcloudio/uni-nvue-styler': 3.0.0-alpha-3040420220402002
       '@dcloudio/uni-shared': 3.0.0-alpha-3040420220402002
       '@rollup/pluginutils': 4.2.0
-      '@vitejs/plugin-vue': 2.3.1(vite@2.9.1)(vue@3.2.32)
+      '@vitejs/plugin-vue': 2.3.1(vite@2.9.16)(vue@3.2.32)
       '@vue/compiler-dom': 3.2.31
       '@vue/compiler-sfc': 3.2.31
       debug: 4.3.4
@@ -782,7 +782,7 @@ packages:
       - vue
     dev: false
 
-  /@dcloudio/vite-plugin-uni@3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.1)(vue@3.2.32):
+  /@dcloudio/vite-plugin-uni@3.0.0-alpha-3040420220402002(postcss@8.4.12)(vite@2.9.16)(vue@3.2.32):
     resolution: {integrity: sha512-WMadpyC3kW04iwVfGVO0GFE2ifCgxU6grNWPY46hA+PM6XpPXLRzUFfBYRZMioNekEUO4Vg4KRDMiPSO/D88+Q==}
     hasBin: true
     peerDependencies:
@@ -794,8 +794,8 @@ packages:
       '@dcloudio/uni-cli-shared': 3.0.0-alpha-3040420220402002(postcss@8.4.12)(vue@3.2.32)
       '@dcloudio/uni-shared': 3.0.0-alpha-3040420220402002
       '@rollup/pluginutils': 4.2.0
-      '@vitejs/plugin-legacy': 1.8.0(vite@2.9.1)
-      '@vitejs/plugin-vue': 2.3.1(vite@2.9.1)(vue@3.2.32)
+      '@vitejs/plugin-legacy': 1.8.0(vite@2.9.16)
+      '@vitejs/plugin-vue': 2.3.1(vite@2.9.16)(vue@3.2.32)
       '@vitejs/plugin-vue-jsx': 1.3.9
       '@vue/compiler-core': 3.2.31
       '@vue/compiler-dom': 3.2.31
@@ -809,7 +809,7 @@ packages:
       hash-sum: 2.0.0
       jsonc-parser: 3.0.0
       picocolors: 1.0.0
-      vite: 2.9.1(sass@1.32.0)(stylus@0.57.0)
+      vite: 2.9.16(sass@1.32.0)(stylus@0.57.0)
     transitivePeerDependencies:
       - postcss
       - supports-color
@@ -947,7 +947,7 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
 
-  /@vitejs/plugin-legacy@1.8.0(vite@2.9.1):
+  /@vitejs/plugin-legacy@1.8.0(vite@2.9.16):
     resolution: {integrity: sha512-S3+uL1zp8GLUbmJAQk2wQbZLTyISKRFSMBwCFI3XQVRD3OZshqkiPyOKdRiSPlP9HoGz+q90kk+1qPm1tJRqCg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -958,7 +958,7 @@ packages:
       magic-string: 0.26.1
       regenerator-runtime: 0.13.9
       systemjs: 6.12.1
-      vite: 2.9.1(sass@1.32.0)(stylus@0.57.0)
+      vite: 2.9.16(sass@1.32.0)(stylus@0.57.0)
     dev: true
 
   /@vitejs/plugin-vue-jsx@1.3.9:
@@ -975,23 +975,23 @@ packages:
       - supports-color
     dev: true
 
-  /@vitejs/plugin-vue@1.10.2(vite@2.9.1):
+  /@vitejs/plugin-vue@1.10.2(vite@2.9.16):
     resolution: {integrity: sha512-/QJ0Z9qfhAFtKRY+r57ziY4BSbGUTGsPRMpB/Ron3QPwBZM4OZAZHdTa4a8PafCwU5DTatXG8TMDoP8z+oDqJw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
     dependencies:
-      vite: 2.9.1(sass@1.32.0)(stylus@0.57.0)
+      vite: 2.9.16(sass@1.32.0)(stylus@0.57.0)
     dev: true
 
-  /@vitejs/plugin-vue@2.3.1(vite@2.9.1)(vue@3.2.32):
+  /@vitejs/plugin-vue@2.3.1(vite@2.9.16)(vue@3.2.32):
     resolution: {integrity: sha512-YNzBt8+jt6bSwpt7LP890U1UcTOIZZxfpE5WOJ638PNxSEKOqAi0+FSKS0nVeukfdZ0Ai/H7AFd6k3hayfGZqQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       vite: ^2.5.10
       vue: ^3.2.25
     dependencies:
-      vite: 2.9.1(sass@1.32.0)(stylus@0.57.0)
+      vite: 2.9.16(sass@1.32.0)(stylus@0.57.0)
       vue: 3.2.32
 
   /@vue/babel-helper-vue-transform-on@1.0.2:
@@ -2042,8 +2042,8 @@ packages:
       eslint-utils: 2.1.0
       ignore: 5.2.4
       minimatch: 3.1.2
-      resolve: 1.22.0
-      semver: 6.3.0
+      resolve: 1.22.4
+      semver: 6.3.1
     dev: true
 
   /eslint-plugin-promise@5.2.0(eslint@7.32.0):
@@ -2624,12 +2624,6 @@ packages:
     resolution: {integrity: sha512-Z7dk6Qo8pOCp3l4tsX2C5ZVas4V+UxwQodwZhLopL91TX8UyyHEXafPcyoeeWuLrwzHcr3igO78wNLwHJHsMCQ==}
     dependencies:
       has: 1.0.3
-    dev: true
-
-  /is-core-module@2.8.1:
-    resolution: {integrity: sha512-SdNCUs284hr40hFTFP6l0IfZ/RSrMXF3qgoRHd3/79unUTvrFO/JoXwkGm+5J/Oe3E/b5GsnG330uUNgRpu1PA==}
-    dependencies:
-      has: 1.0.3
 
   /is-date-object@1.0.5:
     resolution: {integrity: sha512-9YQaSxsAiSwcvS33MBk3wTCVnWK+HhF8VZR2jRxehM16QcVOdHqPn4VPHmRK4lSr38n9JriurInLcP90xsYNfQ==}
@@ -2927,6 +2921,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  /nanoid@3.3.6:
+    resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
+    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
   /natural-compare@1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
     dev: true
@@ -3091,7 +3090,7 @@ packages:
       postcss: 8.4.12
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.0
+      resolve: 1.22.4
 
   /postcss-load-config@3.1.4(postcss@8.4.12):
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
@@ -3176,6 +3175,14 @@ packages:
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.2
+      picocolors: 1.0.0
+      source-map-js: 1.0.2
+
+  /postcss@8.4.28:
+    resolution: {integrity: sha512-Z7V5j0cq8oEKyejIKfpD8b4eBy9cwW2JWPk0+fB1HOAMsfHbnAXLLS+PfVWlzMSLQaWttKDt607I0XHmpE67Vw==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
@@ -3283,7 +3290,7 @@ packages:
     resolution: {integrity: sha512-Hhtrw0nLeSrFQ7phPp4OOcVjLPIeMnRlr5mcnVuMe7M/7eBn98A3hmFRLoFo3DLZkivSYwhRUJTyPyWAk56WLw==}
     hasBin: true
     dependencies:
-      is-core-module: 2.8.1
+      is-core-module: 2.13.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -3294,7 +3301,6 @@ packages:
       is-core-module: 2.13.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    dev: true
 
   /reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
@@ -3732,8 +3738,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /vite@2.9.1(sass@1.32.0)(stylus@0.57.0):
-    resolution: {integrity: sha512-vSlsSdOYGcYEJfkQ/NeLXgnRv5zZfpAsdztkIrs7AZHV8RCMZQkwjo4DS5BnrYTqoWqLoUe1Cah4aVO4oNNqCQ==}
+  /vite@2.9.16(sass@1.32.0)(stylus@0.57.0):
+    resolution: {integrity: sha512-X+6q8KPyeuBvTQV8AVSnKDvXoBMnTx8zxh54sOwmmuOdxkjMmEJXH2UEchA+vTMps1xw9vL64uwJOWryULg7nA==}
     engines: {node: '>=12.2.0'}
     hasBin: true
     peerDependencies:
@@ -3749,8 +3755,8 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.14.36
-      postcss: 8.4.12
-      resolve: 1.22.0
+      postcss: 8.4.28
+      resolve: 1.22.4
       rollup: 2.70.1
       sass: 1.32.0
       stylus: 0.57.0
