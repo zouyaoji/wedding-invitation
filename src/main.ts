@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2023-01-30 00:14:18
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-19 23:21:27
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\main.ts
  */
@@ -13,7 +13,7 @@ import './animate.scss'
 
 import App from './App.vue'
 import { GlobalData } from './types'
-import { getMusicConfig } from './api/wedding-invitation'
+import { getResouces } from './api/wedding-invitation'
 
 if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
   wx.cloud.init({
@@ -82,12 +82,12 @@ if (import.meta.env.VITE_VUE_WECHAT_TCB === 'true') {
 
   music.get().then(res => {
     globalData.musicList = res.data as any[]
-    innerAudioContext.src = globalData.musicList[0].musicUrl
+    innerAudioContext.src = globalData.musicList[0].url
   })
 } else {
-  getMusicConfig().then(res => {
+  getResouces('music').then(res => {
     globalData.musicList = res.data as any[]
-    innerAudioContext.src = globalData.musicList[0].musicUrl
+    innerAudioContext.src = globalData.musicList[0].url
   })
 }
 

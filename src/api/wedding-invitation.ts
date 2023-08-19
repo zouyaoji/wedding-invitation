@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-12-15 00:44:39
- * @LastEditTime: 2023-01-29 23:27:19
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-20 01:26:01
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\api\wedding-invitation.ts
  */
@@ -14,42 +14,60 @@ import { http } from './service'
 export function getCommonConfig() {
   return http.request({
     url: '/api/wedding-invitation/getCommonConfig',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
 /**
- * 获取音乐配置
+ * 获取资源配置
  * @returns
  */
-export function getMusicConfig() {
+export function getResouces(type: 'music' | 'photo-banner' | 'index-banner') {
   return http.request({
-    url: '/api/wedding-invitation/getMusicConfig',
-    method: 'GET'
+    url: '/api/wedding-invitation/getResouces',
+    method: 'GET',
+    params: {
+      type,
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
-/**
- * 获取邀请函页面轮播图列表
- * @returns
- */
-export function getPhotoBannerList() {
-  return http.request({
-    url: '/api/wedding-invitation/getPhotoBannerList',
-    method: 'GET'
-  })
-}
+// /**
+//  * 获取音乐配置
+//  * @returns
+//  */
+// export function getMusicConfig() {
+//   return http.request({
+//     url: '/api/wedding-invitation/getMusicConfig',
+//     method: 'GET'
+//   })
+// }
 
-/**
- * 获取相册页面轮播图列表
- * @returns
- */
-export function getIndexBannerList() {
-  return http.request({
-    url: '/api/wedding-invitation/getIndexBannerList',
-    method: 'GET'
-  })
-}
+// /**
+//  * 获取邀请函页面轮播图列表
+//  * @returns
+//  */
+// export function getPhotoBannerList() {
+//   return http.request({
+//     url: '/api/wedding-invitation/getPhotoBannerList',
+//     method: 'GET'
+//   })
+// }
+
+// /**
+//  * 获取相册页面轮播图列表
+//  * @returns
+//  */
+// export function getIndexBannerList() {
+//   return http.request({
+//     url: '/api/wedding-invitation/getIndexBannerList',
+//     method: 'GET'
+//   })
+// }
 
 /**
  * 获取留言板数据列表
@@ -58,7 +76,10 @@ export function getIndexBannerList() {
 export function getAllMessageList() {
   return http.request({
     url: '/api/wedding-invitation/getMessageList',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
@@ -71,7 +92,10 @@ export function addMessage(data) {
   return http.request({
     url: '/api/wedding-invitation/addMessage',
     method: 'POST',
-    data
+    data,
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
@@ -80,11 +104,14 @@ export function addMessage(data) {
  * @param data
  * @returns
  */
-export function deleteMessage(data) {
+export function deleteMessage(id) {
   return http.request({
     url: '/api/wedding-invitation/deleteMessage',
     method: 'POST',
-    data
+    params: {
+      id,
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
@@ -92,12 +119,13 @@ export function deleteMessage(data) {
  * 通过 openId 获取用户
  * @returns
  */
-export function getUserByOpenId(openId) {
+export function getUserByOpenId(openid) {
   return http.request({
     url: '/api/wedding-invitation/getUserByOpenId',
     method: 'GET',
     params: {
-      openId
+      userId: import.meta.env.VITE_VUE_APP_USERID as string,
+      openid
     }
   })
 }
@@ -110,7 +138,10 @@ export function addOrUpdateUser(data) {
   return http.request({
     url: '/api/wedding-invitation/addOrUpdateUser',
     data,
-    method: 'POST'
+    method: 'POST',
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
@@ -121,7 +152,10 @@ export function addOrUpdateUser(data) {
 export function getFriendUserList() {
   return http.request({
     url: '/api/wedding-invitation/getUserList',
-    method: 'GET'
+    method: 'GET',
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 
@@ -134,7 +168,8 @@ export function getPresentList(openid?) {
     url: '/api/wedding-invitation/getPresentList',
     method: 'GET',
     params: {
-      openid
+      openid,
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
     }
   })
 }
@@ -147,7 +182,10 @@ export function addOrUpdatePresent(data) {
   return http.request({
     url: '/api/wedding-invitation/addOrUpdatePresent',
     method: 'POST',
-    data
+    data,
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }
 /**
@@ -160,7 +198,8 @@ export function code2Session(jsCodeMP: string) {
     url: '/api/wechat/code2Session',
     method: 'GET',
     params: {
-      jsCodeMP
+      jsCodeMP,
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
     }
   })
 }
@@ -175,6 +214,9 @@ export function uploadAvatar(filePath, formData) {
   return http.upload('/api/wedding-invitation/uploadAvatar', {
     filePath,
     name: 'file',
-    formData
+    formData,
+    params: {
+      userId: import.meta.env.VITE_VUE_APP_USERID as string
+    }
   })
 }

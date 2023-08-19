@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:29:23
- * @LastEditTime: 2023-01-18 01:59:39
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-19 23:40:38
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\photo\index.vue
 -->
@@ -17,7 +17,7 @@
 import { onMounted, ref } from 'vue'
 import HSwiper from '@src/component/swiper.vue'
 import { onHide, onShow } from '@dcloudio/uni-app'
-import { getPhotoBannerList, getCommonConfig } from '@src/api/wedding-invitation'
+import { getResouces, getCommonConfig } from '@src/api/wedding-invitation'
 
 const list = ref([])
 const isGif = ref(false)
@@ -54,22 +54,22 @@ const getList = () => {
     const banner = db.collection('indexBanner')
     banner.get().then(res => {
       let result = []
-      for (let i = 0; i < res.data[0].indexBanner.length; i++) {
+      for (let i = 0; i < res.data[0].bannerList.length; i++) {
         let show = i === 0
         result.push({
-          url: res.data[0].indexBanner[i],
+          url: res.data[0].bannerList[i].url,
           show: show
         })
       }
       list.value = result
     })
   } else {
-    getPhotoBannerList().then(res => {
+    getResouces('photo-banner').then(res => {
       let result = []
-      for (let i = 0; i < res.data.indexBanner.length; i++) {
+      for (let i = 0; i < res.data.length; i++) {
         let show = i === 0
         result.push({
-          url: res.data.indexBanner[i],
+          url: res.data[i].url,
           show: show
         })
       }

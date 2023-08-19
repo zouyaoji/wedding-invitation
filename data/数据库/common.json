@@ -1,16 +1,16 @@
 {
-  "_id": "67d7368d-b62d-4ed0-8bb5-b7100fb4746f",
+  "id": "67d7368d-b62d-4ed0-8bb5-b7100fb4746f",
   "heNumber": "18000000000",
   "sheNumber": "18100000000",
   "poster": "cloud://wedding-0gm97h3j6438a979.7765-wedding-0gm97h3j6438a979-1304438610/photos/1-201211163J6.jpg",
   "background": "cloud://wedding-0gm97h3j6438a979.7765-wedding-0gm97h3j6438a979-1304438610/photos/backS.jpg",
   "videoUrl": "cloud://wedding-0gm97h3j6438a979.7765-wedding-0gm97h3j6438a979-1304438610/video/yanhua.mp4",
-  "adminOpenId": [
+  "adminOpenIds": [
     "ozLMf5J_dTcrqIro4MmFvng_KxbM"
   ],
   "location": {
-    "longitude": "119.192471",
-    "latitude": "34.601541"
+    "longitude": 119.192471,
+    "latitude": 34.601541
   },
   "info": {
     "name": "Mr.Z & Miss.Q",

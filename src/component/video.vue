@@ -38,14 +38,14 @@ defineProps({
 const $emit = defineEmits(['closeVideo'])
 const inputValue = ref('')
 const danmuList = ref([])
-const videoContext = ref<WechatMiniprogram.VideoContext>(null)
+let videoContext: WechatMiniprogram.VideoContext = null
 const musicPlay = ref(false)
 const instance = getCurrentInstance()
 const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
 
 onMounted(() => {
   getMessageList()
-  videoContext.value = wx.createVideoContext('myVideo')
+  videoContext = wx.createVideoContext('myVideo')
 })
 
 const play = e => {
@@ -66,7 +66,7 @@ const bindInputBlur = e => {
 }
 
 const bindSendDanmu = () => {
-  videoContext.value.sendDanmu({
+  videoContext.sendDanmu({
     text: inputValue.value,
     color: getRandomColor()
   })
@@ -101,8 +101,8 @@ const getMessageList = () => {
 }
 
 const close = () => {
-  videoContext.value.stop()
   $emit('closeVideo')
+  videoContext && videoContext.stop()
 }
 </script>
 

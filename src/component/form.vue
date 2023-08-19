@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-14 10:26:22
- * @LastEditTime: 2023-01-29 23:40:31
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-20 00:43:40
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\component\form.vue
 -->
@@ -72,7 +72,7 @@ const _id = ref('')
 
 const instance = getCurrentInstance()
 const $emit = defineEmits(['closeForm'])
-const openId = instance.appContext.config.globalProperties.$MpUserData.openId
+const openId = instance.appContext.config.globalProperties.$MpUserData?.openId
 
 const cancel = () => {
   $emit('closeForm')
@@ -157,7 +157,7 @@ const addPresent = () => {
       phone: phone.value,
       count: count.value,
       desc: desc.value,
-      _openid: openId
+      openid: openId
     }).then(res => {
       name.value = ''
       phone.value = ''
@@ -172,7 +172,7 @@ const updateForm = formData => {
   name.value = formData.name
   phone.value = formData.phone
   phoneFlag.value = formData.phoneFlag
-  _id.value = formData._id
+  _id.value = formData.id
   desc.value = formData.desc
 
   list.value.forEach(item => {

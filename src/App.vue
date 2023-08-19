@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2023-01-29 14:10:01
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-20 00:48:17
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\App.vue
 -->
@@ -19,6 +19,30 @@ onShow(() => {
 })
 onHide(() => {
   console.log('App Hide')
+})
+
+uni.login({
+  provider: 'weixin',
+  success: res => {
+    code2Session(res.code).then(res => {
+      const openId = res.data.openid
+      instance.appContext.config.globalProperties.$MpUserData = {
+        openId
+      }
+
+      getUserByOpenId(openId).then(res => {
+        if (res?.data?.length > 0) {
+          instance.appContext.config.globalProperties.$MpUserData = {
+            openId,
+            ...res.data[0]
+          }
+        }
+      })
+    })
+  },
+  fail: err => {
+    console.log('login fail:', err)
+  }
 })
 
 const instance = getCurrentInstance()
@@ -42,30 +66,6 @@ uni.getSystemInfo({
     instance.appContext.config.globalProperties.$StatusBar = e.statusBarHeight
     instance.appContext.config.globalProperties.$CustomBar = e.statusBarHeight! + e.titleBarHeight!
     // #endif
-
-    uni.login({
-      provider: 'weixin',
-      success: res => {
-        code2Session(res.code).then(res => {
-          const openId = res.data.openid
-          instance.appContext.config.globalProperties.$MpUserData = {
-            openId
-          }
-
-          getUserByOpenId(openId).then(res => {
-            if (res?.data?.length > 0) {
-              instance.appContext.config.globalProperties.$MpUserData = {
-                openId,
-                ...res.data[0]
-              }
-            }
-          })
-        })
-      },
-      fail: err => {
-        console.log('login fail:', err)
-      }
-    })
   },
   fail: function (e) {
     console.log(e)

@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:21:48
- * @LastEditTime: 2023-01-29 14:09:24
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-20 00:49:47
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\greet\index.vue
 -->
@@ -111,7 +111,7 @@ const onConfirm = e => {
     openId: instance.appContext.config.globalProperties.$MpUserData.openId
   }).then(res => {
     addOrUpdateUser({
-      _openid: instance.appContext.config.globalProperties.$MpUserData.openId,
+      openid: instance.appContext.config.globalProperties.$MpUserData.openId,
       user: {
         nickName: nickname.value,
         avatarUrl: res.data

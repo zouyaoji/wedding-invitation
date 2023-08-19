@@ -10,8 +10,8 @@
 export type GlobalData = {
   innerAudioContext: WechatMiniprogram.InnerAudioContext
   musicList: Array<{
-    _id: string
-    musicUrl: string
+    id: string
+    url: string
   }>
   musicIndex: number
   animations: Array<

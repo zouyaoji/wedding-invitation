@@ -1,8 +1,8 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-12-14 22:34:46
- * @LastEditTime: 2023-01-17 10:14:43
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-19 23:08:00
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\api\service.ts
  */
@@ -14,8 +14,7 @@ http.setConfig(config => {
   /* 设置全局配置 */
   config.baseURL = import.meta.env.VITE_VUE_APP_API as string
   config.header = {
-    ...config.header,
-    mpname: import.meta.env.VITE_VUE_APP_NAME as string
+    ...config.header
   }
   config.timeout = 20000
   config.custom = {

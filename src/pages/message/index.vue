@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:29:22
- * @LastEditTime: 2023-01-29 23:45:26
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-20 01:29:18
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\message\index.vue
 -->
@@ -14,23 +14,19 @@
         <image class="left" :src="item.url" />
         <div class="right" @click="copy(item)">
           <div class="top">
-            <uni-tag v-if="typeof item.customIndex === 'number'" text="置顶" type="success" />
+            <uni-tag v-if="item.customIndex === 0" text="置顶" type="success" />
             <div class="delete" @tap="deleteMessage(item)">
-              <image
-                src="../../static/images/close.png"
-                class="delete_icon"
-                v-if="item._openid === openId || isAdmin"
-              />
+              <image src="../../static/images/close.png" class="delete_icon" v-if="item.openid === openId || isAdmin" />
             </div>
             <span class="top-l">{{ item.name }}</span>
-            <span class="top-r">{{ item.time }}</span>
+            <span class="top-r">{{ formatDateTime(item.time) }}</span>
           </div>
           <p class="con">{{ item.desc }}</p>
         </div>
       </div>
       <p class="place-end"></p>
     </scroll-view>
-    <div class="bottom">
+    <div class="bottom" v-if="openId">
       <button class="left" lang="zh_CN" open-type="getUserInfo" @getuserinfo="toMessage">说点啥吧</button>
       <button class="right" open-type="getUserInfo" @getuserinfo="toForm">我要出席</button>
     </div>
@@ -124,6 +120,7 @@ import {
   deleteMessage as deleteMessageApi,
   addOrUpdatePresent
 } from '@src/api/wedding-invitation'
+import { onShow } from '@dcloudio/uni-app'
 
 const isOpen = ref(false)
 const desc = ref('')
@@ -144,7 +141,7 @@ const formRef = ref(null)
 const modalName = ref(null)
 const instance = getCurrentInstance()
 const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
-openId.value = instance.appContext.config.globalProperties.$MpUserData.openId
+openId.value = instance.appContext.config.globalProperties.$MpUserData?.openId
 
 const isAdmin = computed(() => {
   return adminsIds.value.indexOf(openId.value) !== -1
@@ -154,6 +151,10 @@ const avatarUrl = ref(
   'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
 )
 
+onShow(() => {
+  openId.value = instance.appContext.config.globalProperties.$MpUserData?.openId
+})
+
 onMounted(() => {
   getVideoUrl()
   isVideo.value = false
@@ -161,6 +162,12 @@ onMounted(() => {
   isFormlist.value = false
   getMessageList()
 })
+
+const formatDateTime = dateTimeString => {
+  const dateObject = new Date(dateTimeString)
+  const formattedDateTime = `${dateObject.toISOString().slice(0, 19).replace('T', ' ')}`
+  return formattedDateTime
+}
 
 const onInput = e => {
   nickname.value = e.detail.value
@@ -186,7 +193,7 @@ const onConfirm = e => {
     openId: instance.appContext.config.globalProperties.$MpUserData.openId
   }).then(res => {
     addOrUpdateUser({
-      _openid: instance.appContext.config.globalProperties.$MpUserData.openId,
+      openid: instance.appContext.config.globalProperties.$MpUserData.openId,
       user: {
         nickName: nickname.value,
         avatarUrl: res.data
@@ -216,13 +223,13 @@ const getVideoUrl = () => {
     common.get().then(res => {
       url.value = res.data[0].videoUrl
       poster.value = res.data[0].poster
-      adminsIds.value = res.data[0].adminOpenId
+      adminsIds.value = res.data[0].adminOpenIds
     })
   } else {
     getCommonConfig().then(res => {
       url.value = res.data.videoUrl
       poster.value = res.data.poster
-      adminsIds.value = res.data.adminOpenId
+      adminsIds.value = res.data.adminOpenIds
     })
   }
 }
@@ -277,7 +284,7 @@ const sendMessage = () => {
         time: getNowFormatDate(),
         url: instance.appContext.config.globalProperties.$MpUserData?.user.avatarUrl,
         name: instance.appContext.config.globalProperties.$MpUserData?.user.nickName,
-        _openid: instance.appContext.config.globalProperties.$MpUserData.openId
+        openid: instance.appContext.config.globalProperties.$MpUserData.openId
       }).then(res => {
         isOpen.value = false
         desc.value = ''
@@ -301,7 +308,7 @@ const deleteMessage = item => {
               .callFunction({
                 name: 'message',
                 data: {
-                  _id: item._id
+                  id: item.id
                 }
               })
               .then(res => {
@@ -312,7 +319,7 @@ const deleteMessage = item => {
             const db = wx.cloud.database()
             const message = db.collection('message')
             message
-              .doc(item._id)
+              .doc(item.id)
               .remove()
               .then(res => {
                 desc.value = ''
@@ -324,7 +331,7 @@ const deleteMessage = item => {
           }
         } else {
           deleteMessageApi({
-            _id: item._id
+            id: item.id
           }).then(res => {
             desc.value = ''
             getMessageList()
@@ -380,7 +387,7 @@ const getMessageList = () => {
       })
   } else {
     getAllMessageList().then(res => {
-      messageList.value = res.data.reverse()
+      messageList.value = res.data
     })
   }
 }
@@ -425,20 +432,20 @@ const getIsPresentExist = () => {
     const present = db.collection('present')
     present
       .where({
-        _openid: openId.value
+        openid: openId.value
       })
       .get()
       .then(res => {
         const formData: any = {
           dataFlag: false,
-          _id: ''
+          id: ''
         }
         if (res.data.length !== 0) {
           formData.name = res.data[0].name
           formData.phone = res.data[0].phone
           formData.count = res.data[0].count
           formData.phoneFlag = true
-          formData._id = res.data[0]._id
+          formData.id = res.data[0].id
           formData.desc = res.data[0].desc
         }
 
@@ -449,14 +456,14 @@ const getIsPresentExist = () => {
     getPresentList(openId.value).then(res => {
       const formData: any = {
         dataFlag: false,
-        _id: ''
+        id: ''
       }
       if (res?.data?.length) {
         formData.name = res.data[0].name
         formData.phone = res.data[0].phone
         formData.count = res.data[0].count
         formData.phoneFlag = true
-        formData._id = res.data[0]._id
+        formData.id = res.data[0].id
         formData.desc = res.data[0].desc
       }
       formRef.value.updateForm(formData)
@@ -470,7 +477,7 @@ const getIsExist = () => {
   const user = db.collection('user')
   user
     .where({
-      _openid: openId.value
+      openid: openId.value
     })
     .get()
     .then(res => {
@@ -519,8 +526,8 @@ const getFromlist = () => {
             desc: x.desc,
             name: x.name,
             phone: isAdmin.value ? x.phone : x.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'),
-            _id: x._id,
-            _openid: x._openid
+            id: x.id,
+            openid: x.openid
           }
         })
       })
@@ -532,8 +539,8 @@ const getFromlist = () => {
           desc: x.desc,
           name: x.name,
           phone: isAdmin.value ? x.phone : x.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'),
-          _id: x._id,
-          _openid: x._openid
+          id: x.id,
+          openid: x.openid
         }
       })
     })

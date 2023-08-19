@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2023-01-30 00:16:41
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-19 23:38:08
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\pages\index\index.vue
 -->
@@ -29,7 +29,7 @@ import IndexSwiper from '@src/component/index-swiper.vue'
 import { onHide, onLoad, onShareAppMessage, onShow, onUnload } from '@dcloudio/uni-app'
 import { GlobalData } from '@src/types'
 import { showToast } from '@src/utils'
-import { getCommonConfig, getIndexBannerList } from '@src/api/wedding-invitation'
+import { getCommonConfig, getResouces } from '@src/api/wedding-invitation'
 
 const isPlaying = ref(false)
 const list = ref([])
@@ -103,7 +103,7 @@ const getBannerList = () => {
       let animations = ['fadeInLeft', 'slideInDown', 'rotateInDownRight', 'rollIn', 'jackInTheBox', 'flip']
       for (let i = 0; i < res.data[0].bannerList.length; i++) {
         result.push({
-          url: res.data[0].bannerList[i],
+          url: res.data[0].bannerList[i].url,
           show: i === 0,
           class: animations[i]
         })
@@ -111,12 +111,12 @@ const getBannerList = () => {
       list.value = result
     })
   } else {
-    getIndexBannerList().then(res => {
+    getResouces('index-banner').then(res => {
       let result = []
       let animations = ['fadeInLeft', 'slideInDown', 'rotateInDownRight', 'rollIn', 'jackInTheBox', 'flip']
-      for (let i = 0; i < res.data.bannerList.length; i++) {
+      for (let i = 0; i < res.data.length; i++) {
         result.push({
-          url: res.data.bannerList[i],
+          url: res.data[i].url,
           show: i === 0,
           class: animations[i]
         })
