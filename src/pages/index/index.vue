@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2023-08-19 23:38:08
+ * @LastEditTime: 2023-08-23 09:46:11
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \wedding-invitation\src\pages\index\index.vue
+ * @FilePath: \wedding-invitation-me\src\pages\index\index.vue
 -->
 <template>
   <div class="index">
@@ -12,13 +12,15 @@
     <div class="bg-swiper">
       <index-swiper :list="list" :info="info" :autoplay="autoplay"></index-swiper>
     </div>
-    <div class="bg_music" v-if="isPlaying" @tap="audioPlay">
-      <image src="../../static/images/music_icon.png" class="musicImg music_icon" />
-      <image src="../../static/images/music_play.png" class="music_play pauseImg" />
-    </div>
-    <div class="bg_music" v-else @tap="audioPlay">
-      <image src="../../static/images/music_icon.png" class="musicImg" />
-      <image src="../../static/images/music_play.png" class="music_play playImg" />
+    <div v-if="videoUrl !== '' && videoUrl !== undefined && videoUrl !== null">
+      <div class="bg_music" v-if="isPlaying" @tap="audioPlay">
+        <image src="../../static/images/music_icon.png" class="musicImg music_icon" />
+        <image src="../../static/images/music_play.png" class="music_play pauseImg" />
+      </div>
+      <div class="bg_music" v-else @tap="audioPlay">
+        <image src="../../static/images/music_icon.png" class="musicImg" />
+        <image src="../../static/images/music_play.png" class="music_play playImg" />
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +42,7 @@ const instance = getCurrentInstance()
 const globalData: GlobalData = instance.appContext.config.globalProperties.globalData
 const innerAudioContext = globalData.innerAudioContext
 const background = ref('')
+const videoUrl = ref('')
 
 onLoad(() => {
   innerAudioContext.onEnded(onEnded)
@@ -57,6 +60,11 @@ onLoad(() => {
     getCommonConfig().then(res => {
       background.value = res.data.background
       info.value = res.data.info
+      videoUrl.value = res.data.videoUrl
+
+      if (videoUrl.value) {
+        innerAudioContext.src = globalData.musicList[0].url
+      }
     })
   }
 
@@ -90,7 +98,7 @@ const onEnded = () => {
   if (globalData.musicIndex >= globalData.musicList.length) {
     globalData.musicIndex = 0
   }
-  globalData.innerAudioContext.src = globalData.musicList[globalData.musicIndex].musicUrl
+  globalData.innerAudioContext.src = globalData.musicList[globalData.musicIndex].url
   globalData.musicIndex += 1
 }
 

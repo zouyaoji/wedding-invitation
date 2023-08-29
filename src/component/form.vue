@@ -1,16 +1,16 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-14 10:26:22
- * @LastEditTime: 2023-08-20 00:43:40
+ * @LastEditTime: 2023-08-22 15:30:20
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \wedding-invitation\src\component\form.vue
+ * @FilePath: \wedding-invitation-me\src\component\form.vue
 -->
 <template>
   <div class="form">
     <image class="head-img" src="../../static/images/green-flower.png" />
     <p class="title"><span>* </span>姓名</p>
-    <input type="text" placeholder="怎么称呼您呢？" v-model="name" maxlength="6" />
+    <input type="text" placeholder="怎么称呼您呢？" v-model="name" maxlength="20" />
     <p class="title"><span>* </span>电话</p>
     <input type="number" placeholder="请填写有效的手机号码" v-model="phone" @input="checkPhone" maxlength="11" />
     <p class="title">几人出席</p>
@@ -21,15 +21,7 @@
       </label>
     </radio-group>
     <p class="title">备注</p>
-    <textarea
-      focus="true"
-      maxlength="80"
-      class="desc"
-      placeholder="请填写您的备注需求"
-      name="textarea"
-      placeholder-style="color:#ccc;"
-      v-model="desc"
-    />
+    <textarea class="desc" placeholder="请填写您的备注需求" placeholder-style="color:#ccc;" v-model="desc" />
     <div class="btn">
       <button class="left" @tap="submit">确认提交</button>
       <button class="right" @tap="cancel">取消</button>
@@ -65,7 +57,7 @@ const list = ref([
 ])
 const desc = ref('')
 const name = ref('')
-const phone = ref('')
+const phone = ref('asdasd')
 const count = ref('自己出席')
 const phoneFlag = ref(false)
 const _id = ref('')
@@ -102,7 +94,7 @@ const submit = () => {
 }
 
 const checkPhone = () => {
-  let reg = /^(1[3-9][0-9])\d{8}$/
+  let reg = /^1[3456789]\d{9}$/
   if (phone.value.length === 11) {
     if (reg.test(phone.value)) {
       phoneFlag.value = true

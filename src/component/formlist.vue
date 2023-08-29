@@ -9,7 +9,7 @@
         <div class="item-middle">
           <p class="address">
             <span>{{ item.count }}</span>
-            <span v-if="item.desc">备注：{{ item.desc }}</span>
+            <span v-if="item.desc" style="padding-right: 25rpx">备注：{{ item.desc }}</span>
           </p>
         </div>
       </li>

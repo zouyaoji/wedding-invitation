@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:29:22
- * @LastEditTime: 2023-08-20 01:29:18
+ * @LastEditTime: 2023-08-22 15:51:01
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \wedding-invitation\src\pages\message\index.vue
+ * @FilePath: \wedding-invitation-me\src\pages\message\index.vue
 -->
 <template>
   <div class="message">
@@ -12,11 +12,16 @@
       <p class="place"></p>
       <div class="item" v-for="(item, index) in messageList" :key="index">
         <image class="left" :src="item.url" />
-        <div class="right" @click="copy(item)">
+        <div class="right">
           <div class="top">
-            <uni-tag v-if="item.customIndex === 0" text="置顶" type="success" />
-            <div class="delete" @tap="deleteMessage(item)">
-              <image src="../../static/images/close.png" class="delete_icon" v-if="item.openid === openId || isAdmin" />
+            <uni-tag v-if="item.customIndex === 0" text="置顶" type="success" @click="copy(item)" />
+            <div class="delete">
+              <image
+                src="../../static/images/close.png"
+                class="delete_icon"
+                @click="deleteMessage(item)"
+                v-if="item.openid === openId || isAdmin"
+              />
             </div>
             <span class="top-l">{{ item.name }}</span>
             <span class="top-r">{{ formatDateTime(item.time) }}</span>
@@ -31,21 +36,13 @@
       <button class="right" open-type="getUserInfo" @getuserinfo="toForm">我要出席</button>
     </div>
     <div class="dialog" v-show="isOpen">
-      <textarea
-        focus="true"
-        maxlength="80"
-        class="desc"
-        placeholder="在这里输入您想要说的话"
-        name="textarea"
-        placeholder-style="color:#ccc;"
-        v-model="desc"
-      />
+      <textarea class="desc" placeholder="在这里输入您想要说的话" placeholder-style="color:#ccc;" v-model="desc" />
       <div class="btn">
         <button class="left" @tap="sendMessage">发送留言</button>
         <button class="right" @tap="cancel">取消</button>
       </div>
     </div>
-    <div class="video-dialog" @tap="toVideo" v-if="url !== '' && url !== undefined">
+    <div class="video-dialog" @tap="toVideo" v-if="url !== '' && url !== undefined && url !== null">
       <image src="../../static/images/video1.png" />
     </div>
     <div class="form-dialog" @tap="lookList">
@@ -153,15 +150,21 @@ const avatarUrl = ref(
 
 onShow(() => {
   openId.value = instance.appContext.config.globalProperties.$MpUserData?.openId
-})
 
-onMounted(() => {
   getVideoUrl()
   isVideo.value = false
   isForm.value = false
   isFormlist.value = false
   getMessageList()
 })
+
+// onMounted(() => {
+//   getVideoUrl()
+//   isVideo.value = false
+//   isForm.value = false
+//   isFormlist.value = false
+//   getMessageList()
+// })
 
 const formatDateTime = dateTimeString => {
   const dateObject = new Date(dateTimeString)
@@ -182,28 +185,29 @@ const onConfirm = e => {
     showToast('请选择或输入昵称~')
     return
   }
-
   if (avatarUrl.value === null || avatarUrl.value === '') {
     showToast('请选择或上传头像~')
     return
   }
   modalName.value = null
 
+  const openId = instance.appContext.config.globalProperties.$MpUserData.openId
+
   uploadAvatar(avatarUrl.value, {
-    openId: instance.appContext.config.globalProperties.$MpUserData.openId
+    openId: openId
   }).then(res => {
     addOrUpdateUser({
-      openid: instance.appContext.config.globalProperties.$MpUserData.openId,
+      openid: openId,
       user: {
         nickName: nickname.value,
         avatarUrl: res.data
       }
     }).then(res => {
       isOpen.value = true
-      getUserByOpenId(instance.appContext.config.globalProperties.$MpUserData.openId).then(res => {
+      getUserByOpenId(openId).then(res => {
         if (res?.data?.length > 0) {
           instance.appContext.config.globalProperties.$MpUserData = {
-            openId: instance.appContext.config.globalProperties.$MpUserData,
+            openId,
             ...res.data[0]
           }
         }
@@ -330,9 +334,7 @@ const deleteMessage = item => {
               })
           }
         } else {
-          deleteMessageApi({
-            id: item.id
-          }).then(res => {
+          deleteMessageApi(item.id).then(res => {
             desc.value = ''
             getMessageList()
           })
@@ -456,15 +458,16 @@ const getIsPresentExist = () => {
     getPresentList(openId.value).then(res => {
       const formData: any = {
         dataFlag: false,
-        id: ''
+        id: '',
+        name: instance.appContext.config.globalProperties.$MpUserData?.user.nickName
       }
       if (res?.data?.length) {
-        formData.name = res.data[0].name
-        formData.phone = res.data[0].phone
-        formData.count = res.data[0].count
+        formData.name = res.data?.[0]?.name
+        formData.phone = res.data?.[0]?.phone
+        formData.count = res.data?.[0]?.count
         formData.phoneFlag = true
-        formData.id = res.data[0].id
-        formData.desc = res.data[0].desc
+        formData.id = res.data?.[0]?.id
+        formData.desc = res.data?.[0]?.desc
       }
       formRef.value.updateForm(formData)
       isForm.value = true
@@ -654,7 +657,8 @@ const getFromlist = () => {
     position: fixed;
     bottom: 0;
     left: 0;
-    z-index: 99;
+    padding: 30rpx;
+    z-index: 6669;
     background: #fff;
     width: 100%;
     .avatar-wrapper {

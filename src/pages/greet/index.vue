@@ -1,10 +1,10 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:21:48
- * @LastEditTime: 2023-08-20 00:49:47
+ * @LastEditTime: 2023-08-24 15:32:50
  * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \wedding-invitation\src\pages\greet\index.vue
+ * @FilePath: \wedding-invitation-me\src\pages\greet\index.vue
 -->
 <template>
   <div class="greet">
@@ -66,6 +66,7 @@
 </template>
 
 <script lang="ts" setup>
+import { onShow } from '@dcloudio/uni-app'
 import {
   addOrUpdateUser,
   code2Session,
@@ -83,7 +84,11 @@ const modalName = ref(null)
 const avatarUrl = ref(null)
 const nickname = ref(null)
 
-onMounted(() => {
+// onMounted(() => {
+//   getUserList()
+// })
+
+onShow(() => {
   getUserList()
 })
 
@@ -107,11 +112,12 @@ const onConfirm = e => {
   }
   modalName.value = null
 
+  const openId = instance.appContext.config.globalProperties.$MpUserData.openId
   uploadAvatar(avatarUrl.value, {
-    openId: instance.appContext.config.globalProperties.$MpUserData.openId
+    openId
   }).then(res => {
     addOrUpdateUser({
-      openid: instance.appContext.config.globalProperties.$MpUserData.openId,
+      openid: openId,
       user: {
         nickName: nickname.value,
         avatarUrl: res.data
@@ -119,10 +125,10 @@ const onConfirm = e => {
     }).then(res => {
       showToast('祝福成功~')
       getUserList()
-      getUserByOpenId(instance.appContext.config.globalProperties.$MpUserData.openId).then(res => {
+      getUserByOpenId(openId).then(res => {
         if (res?.data?.length > 0) {
           instance.appContext.config.globalProperties.$MpUserData = {
-            openId: instance.appContext.config.globalProperties.$MpUserData,
+            openId,
             ...res.data[0]
           }
         }

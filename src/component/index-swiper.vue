@@ -1,8 +1,8 @@
 <!--
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-13 09:40:59
- * @LastEditTime: 2022-04-14 12:08:59
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-29 10:44:03
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
  * @FilePath: \wedding-invitation\src\component\index-swiper.vue
 -->
@@ -251,7 +251,7 @@ const animationfinish = val => {
         padding: 10rpx;
         animation: infoAnimation 12s linear infinite;
         .content {
-          width: 626rpx;
+          width: 613rpx;
           border: 1rpx solid #000;
           display: flex;
           flex-direction: column;
