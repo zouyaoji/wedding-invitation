@@ -44,26 +44,25 @@
     "@dcloudio/uni-mp-toutiao": "3.0.0-alpha-3040420220402002",
     "@dcloudio/uni-mp-weixin": "3.0.0-alpha-3040420220402002",
     "@dcloudio/uni-quickapp-webview": "3.0.0-alpha-3040420220402002",
-    "luch-request": "^3.0.8",
-    "miniprogram-api-typings": "^3.4.6",
-    "vue": "^3.2.31",
-    "vue-i18n": "^9.1.9",
-    "vuex": "^4.0.2"
+    "luch-request": "^3.1.1",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@dcloudio/types": "^2.5.19",
     "@dcloudio/uni-automator": "3.0.0-alpha-3040420220402002",
     "@dcloudio/uni-cli-shared": "3.0.0-alpha-3040420220402002",
     "@dcloudio/vite-plugin-uni": "3.0.0-alpha-3040420220402002",
-    "@vitejs/plugin-vue": "^1.10.2",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-vue": "^7.16.0",
-    "prettier": "2.5.0",
-    "sass": "1.32.0",
+    "@types/node": "20.4.8",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-vue": "^9.16.1",
+    "miniprogram-api-typings": "^3.11.0",
+    "prettier": "^3.0.1",
+    "sass": "1.32.12",
     "stylus": "^0.57.0",
-    "typescript": "^4.6.3",
-    "vite": "^2.9.1"
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9"
   }
 }

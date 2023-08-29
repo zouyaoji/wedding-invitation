@@ -1,10 +1,10 @@
 /*
  * @Author: zouyaoji@https://github.com/zouyaoji
  * @Date: 2022-04-12 21:49:06
- * @LastEditTime: 2022-04-13 14:44:12
- * @LastEditors: zouyaoji
+ * @LastEditTime: 2023-08-22 14:53:40
+ * @LastEditors: zouyaoji 370681295@qq.com
  * @Description:
- * @FilePath: \wedding-invitation\vite.config.ts
+ * @FilePath: \wedding-invitation-me\vite.config.ts
  */
 import { defineConfig } from 'vite'
 import uni from '@dcloudio/vite-plugin-uni'
@@ -17,5 +17,8 @@ export default defineConfig({
     alias: {
       '@src': resolve(__dirname, './src')
     }
+  },
+  define: {
+    'process.env': {}
   }
 })
